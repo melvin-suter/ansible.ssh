@@ -1,0 +1,30 @@
+---
+  - name: Create user '{{ ssh_user_name }}'
+    user:
+      name: "{{ ssh_user_name }}"
+      comment: "{{ ssh_user_comment }}"
+      groups: "{{ ssh_user_groups }}"
+      # ansible all -i localhost, -m debug -a "msg={{ 'mypassword' | password_hash('sha512', 'mysecretsalt') }}"
+      password: "{{ ssh_user_password }}"
+
+  - name: Wheel user '{{ ssh_user_name }}'
+    user:
+      name: "{{ ssh_user_name }}"
+      groups: "wheel"
+      append: yes
+    when: "ssh_user_has_wheel == 'yes'"
+
+  - name: Add authorized key from {{ ssh_key_name }}
+    authorized_key:
+      user: "{{ ssh_user_name }}"
+      state: present
+      key: "{{ lookup('file', ssh_key_file ) }}"
+
+  - name: Set wheel as sudoer with nopasswd
+    lineinfile:
+      path: /etc/sudoers
+      state: present
+      regexp: '^%wheel\s'
+      line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    when: "sudo_nopasswd == 'yes'"
+...
