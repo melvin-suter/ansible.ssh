@@ -24,7 +24,7 @@
     lineinfile:
       path: /etc/sudoers
       state: present
-      regexp: '^%wheel\s'
-      line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+      regexp: '^%wheel'
+      line: '%wheel     ALL=(ALL)   NOPASSWD: ALL'
     when: "sudo_nopasswd == 'yes'"
 ...

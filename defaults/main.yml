@@ -3,6 +3,7 @@
 ssh_user_name: user1
 ssh_user_comment: User Name
 ssh_user_groups:
+- wheel
 # Important if ansible uses this user
 ssh_user_has_wheel: yes
 # ansible all -i localhost, -m debug -a "msg={{ 'mypassword' | password_hash('sha512', 'mysecretsalt') }}"
